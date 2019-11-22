@@ -68,3 +68,5 @@ db.sqlite3
 
 # PyCharm
 .idea/
+
+/venv
