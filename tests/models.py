@@ -10,8 +10,10 @@ class User(models.Model):
     permissions = models.ManyToManyField('Permission', related_name='users')
     date_of_birth = models.DateField(null=True, blank=True)
     # 'related_name' intentionally left unset in location field below:
-    location = models.ForeignKey('Location', null=True, blank=True)
-    favorite_pet_type = models.ForeignKey(ContentType, null=True, blank=True)
+    location = models.ForeignKey('Location',
+        on_delete=models.CASCADE, null=True, blank=True)
+    favorite_pet_type = models.ForeignKey(ContentType,
+        on_delete=models.CASCADE, null=True, blank=True)
     favorite_pet_id = models.TextField(null=True, blank=True)
     favorite_pet = GenericForeignKey(
         'favorite_pet_type',
@@ -21,15 +23,16 @@ class User(models.Model):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     display_name = models.TextField()
     thumbnail_url = models.TextField(null=True, blank=True)
 
 
 class Cat(models.Model):
     name = models.TextField()
-    home = models.ForeignKey('Location')
-    backup_home = models.ForeignKey('Location', related_name='friendly_cats')
+    home = models.ForeignKey('Location', on_delete=models.CASCADE)
+    backup_home = models.ForeignKey('Location',
+        on_delete=models.CASCADE, related_name='friendly_cats')
     hunting_grounds = models.ManyToManyField(
         'Location',
         related_name='annoying_cats',
@@ -37,9 +40,11 @@ class Cat(models.Model):
     )
     parent = models.ForeignKey(
         'Cat',
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name='kittens')
+        related_name='kittens'
+    )
 
 
 class Dog(models.Model):
@@ -80,7 +85,8 @@ class Event(models.Model):
     """
     name = models.TextField()
     status = models.TextField(default="current")
-    location = models.ForeignKey('Location', null=True, blank=True)
+    location = models.ForeignKey('Location',
+        on_delete=models.CASCADE, null=True, blank=True)
     users = models.ManyToManyField('User')
 
 
@@ -89,11 +95,13 @@ class A(models.Model):
 
 
 class B(models.Model):
-    a = models.OneToOneField('A', related_name='b')
+    a = models.OneToOneField('A',
+        on_delete=models.CASCADE, related_name='b')
 
 
 class C(models.Model):
-    b = models.ForeignKey('B', related_name='cs')
+    b = models.ForeignKey('B',
+        on_delete=models.CASCADE, related_name='cs')
     d = models.ForeignKey('D')
 
 

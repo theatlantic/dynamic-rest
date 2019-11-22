@@ -28,7 +28,7 @@ else:
         'PORT': ''
     }
 
-MIDDLEWARE_CLASSES = ()
+MIDDLEWARE = ()
 
 INSTALLED_APPS = (
     'rest_framework',
@@ -36,7 +36,6 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sites',
-    'debug_toolbar',
     'dynamic_rest',
     'tests',
 )

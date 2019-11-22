@@ -14,27 +14,33 @@ class DJBlueprintsTestCase(TestCase):
         'Integration tests disabled'
     )
     def test_blueprints(self):
-        # generate a test application
+        # Generate a test application
         application = TemporaryApplication()
-        # add a model
+
+        # Add a model
         application.execute('generate model foo --not-interactive')
-        # create and apply migrations
+
+        # Create and apply migrations
         application.execute('migrate')
-        # add this project as a dependency
-        # this file is ROOT/tests/integration/test_blueprints.py
+
+        # Add this project as a dependency
+        # This file is ROOT/tests/integration/test_blueprints.py
         root = os.path.abspath(os.path.join(__file__, '../../..'))
         application.execute('add %s --dev --not-interactive' % root)
-        # generate an API endpoint for the generated model
+
+        # Generate an API endpoint for the generated model
         application.execute('generate api v0 foo --not-interactive')
-        # start the server
-        server = application.execute('serve 9123', async=True)
+
+        # Start the server
+        server = application.execute('serve 9123', run_async=True)
+
         time.sleep(2)
 
-        # verify a simple POST flow for the "foo" resource
+        # Verify a simple POST flow for the "foo" resource
         response = requests.post('http://localhost:9123/v0/foos/')
         self.assertTrue(response.status_code, 201)
         content = json.loads(response.content)
         self.assertEquals(content, {'foo': {'id': 1}})
 
-        # stop the server
+        # Stop the server
         server.terminate()
