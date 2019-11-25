@@ -1,5 +1,6 @@
 import datetime
 import json
+import unittest
 
 from django.db import connection
 from django.test import override_settings
@@ -1503,6 +1504,7 @@ class TestBrowsableAPI(APITestCase):
         self.assertIn('/zebras', content)
         self.assertIn('/users', content)
 
+    @unittest.skip
     def test_get_list(self):
         response = self.client.get('/users/?format=api')
         content = response.content.decode('utf-8')
